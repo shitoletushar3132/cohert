@@ -1,4 +1,4 @@
-
+const fs = require("fs")
 // class Animal {
 //     constructor(name, legCount, speaks) {
 //         this.name = name;
@@ -53,4 +53,8 @@
 
 // console.log(eval("2+2"))
 
+fs.readFile("style.css", "utf-8", (err, data) => {
+    console.log(data)
+})
 
+console.log("hello..............")
