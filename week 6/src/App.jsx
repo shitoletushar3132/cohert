@@ -4,24 +4,10 @@ import "./App.css";
 let counter = 4;
 
 function App() {
-  const [todos, setTodos] = useState([
-    { id: 1, title: "hello", desc: "goo" },
-    { id: 2, title: "hello2", desc: "goo2" },
-    { id: 3, title: "hello3", desc: "goo3" },
-  ]);
-  function addTodo() {
-    setTodos([
-      ...todos,
-      { id: counter++, title: Math.random(), desc: Math.random() },
-    ]);
-  }
   return (
-    <>
-      <button onClick={addTodo}>Add a Todo</button>
-      {todos.map((todo) => (
-        <Todo title={todo.title} desc={todo.desc} key={todo.id} />
-      ))}
-    </>
+    <div>
+      <CardWrapper>hi there</CardWrapper>
+    </div>
   );
 }
 
@@ -39,5 +25,16 @@ function Todo({ title, desc }) {
     </div>
   );
 }
+
+// children is gives all children which are present in the
+// WrapperComponent
+// CardWrapper <CardWrapper> Hello </CardWrapper/> ... hello is children
+function CardWrapper({ children }) {
+  return <div style={{ border: "2px solid black" }}>{children}</div>;
+}
+
+const TextComponent = () => {
+  return <div>Hi There</div>;
+};
 
 export default App;
