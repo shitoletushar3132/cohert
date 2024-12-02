@@ -1,12 +1,17 @@
 import { memo, useMemo, useState } from "react";
 import "./App.css";
+import CallBack from "./CallBack";
+import UseMemo from "./UseMemo";
+import Book from "./Book";
 
 let counter = 4;
 
 function App() {
   return (
     <div>
-      <CardWrapper>hi there</CardWrapper>
+      <CallBack />
+      <UseMemo />
+      <Book />
     </div>
   );
 }
