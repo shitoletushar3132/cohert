@@ -1,36 +1,21 @@
-import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
-import Landing from "./components/Landing";
-import { lazy, Suspense, useContext, useState, createContext } from "react";
-
-const Dashboard = lazy(() => import("./components/Dashboard"));
-
-export const CountContext = createContext();
+import {
+  RecoilRoot,
+  useRecoilState,
+  useRecoilValue,
+  useSetRecoilState,
+} from "recoil";
+import { countAtom, evenSelector } from "./store/atoms/count";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <CountContext.Provider value={{ count, setCount }}>
-      <BrowserRouter>
-        <Appbar />
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route
-            path="/dashboard"
-            element={
-              <Suspense fallback={<div>Loading Dashboard...</div>}>
-                <Dashboard />
-              </Suspense>
-            }
-          />
-        </Routes>
-        <Display />
-      </BrowserRouter>
-    </CountContext.Provider>
+    <RecoilRoot>
+      <Display />
+    </RecoilRoot>
   );
 }
 
 function Display() {
+  console.log("render");
   return (
     <div>
       <CountRenderer />
@@ -40,28 +25,29 @@ function Display() {
 }
 
 function CountRenderer() {
-  const { count } = useContext(CountContext);
-  return <h1>{count}</h1>;
-}
-
-function Button() {
-  const { count, setCount } = useContext(CountContext);
+  const count = useRecoilValue(countAtom);
   return (
-    <>
-      <button onClick={() => setCount(count + 1)}>Increase</button>
-      <button onClick={() => setCount(count - 1)}>Decrease</button>
-    </>
+    <div>
+      <h1>{count}</h1>
+      <ITISEVEN />
+    </div>
   );
 }
 
-function Appbar() {
-  const navigate = useNavigate();
+function ITISEVEN() {
+  const count = useRecoilValue(evenSelector);
+  console.log("prin");
+  return <p>{count % 2 == 0 ? "it is even" : ""}</p>;
+}
 
+function Button() {
+  // const [count, setCount] = useRecoilState(countAtom);
+  const setCount = useSetRecoilState(countAtom);
   return (
-    <div>
-      <button onClick={() => navigate("/")}>Landing</button>
-      <button onClick={() => navigate("/dashboard")}>Dashboard</button>
-    </div>
+    <>
+      <button onClick={() => setCount((count) => count + 1)}>Increase</button>
+      <button onClick={() => setCount((count) => count - 1)}>Decrease</button>
+    </>
   );
 }
 
