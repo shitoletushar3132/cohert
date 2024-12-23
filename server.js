@@ -2,10 +2,11 @@ const http = require("http");
 
 const server = http.createServer((req, res) => {
   // Set CORS headers
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173"); // Allow all origins
+  res.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS"); // Allow specific HTTP methods
   res.setHeader("Access-Control-Allow-Headers", "Content-Type"); // Allow specific headers
 
+  console.log(req);
   // Handle preflight requests (OPTIONS)
   if (req.method === "OPTIONS") {
     res.writeHead(204); // No Content
@@ -31,6 +32,6 @@ const server = http.createServer((req, res) => {
 });
 
 // Start the server
-server.listen(3000, () => {
+server.listen(3001, () => {
   console.log("Server is running on http://localhost:3000");
 });
