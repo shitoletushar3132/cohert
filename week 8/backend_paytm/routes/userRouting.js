@@ -72,13 +72,14 @@ userRouter.post("/signup", async (req, res) => {
     const { success, error } = signUpSchema.safeParse(body);
 
     if (!success) {
-      return res.status(400).json({ message: error });
+      return res
+        .status(400)
+        .json({ message: error.errors.map((e) => e.message) });
     }
 
     const user = await User.findOne({
       userName: body.userName,
     });
-
 
     if (user) {
       return res
@@ -100,8 +101,7 @@ userRouter.post("/signup", async (req, res) => {
       balance: 1 + Math.random() * 10000,
     });
 
-    const token = jwt.sign({ userId }, JWT_SECRET);
-
+    const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "15m" });
     res
       .status(201)
       .json({ message: "User Registered Successfully", token: token });
@@ -122,7 +122,7 @@ userRouter.post("/signin", async (req, res) => {
     }
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "15m",
     });
 
     res.status(200).json({
@@ -132,6 +132,14 @@ userRouter.post("/signin", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Error while Sign In", details: error });
+  }
+});
+
+userRouter.get("/logOut", authMiddleware, async (req, res) => {
+  try {
+    res.status(200).json({ message: "Successfully LogOut", token: "" });
+  } catch (error) {
+    console.log(error);
   }
 });
 
