@@ -66,15 +66,13 @@ const updateBody = zod.object({
 
 userRouter.post("/signup", async (req, res) => {
   const body = req.body;
-  console.log(body);
+  console.log(req.body);
 
   try {
     const { success, error } = signUpSchema.safeParse(body);
 
     if (!success) {
-      return res
-        .status(400)
-        .json({ message: error.errors.map((e) => e.message) });
+      return res.status(409).json({ message: error.issues[0].message });
     }
 
     const user = await User.findOne({
@@ -82,29 +80,31 @@ userRouter.post("/signup", async (req, res) => {
     });
 
     if (user) {
-      return res
-        .status(400)
-        .json({ message: "Email Already Taken / Incorrect Inputs" });
+      res
+        .status(409)
+        .json({ message: "Usename Already Taken / Incorrect Inputs" });
+    } else {
+      const dbUser = await User.create({
+        userName: req.body.userName,
+        password: req.body.password,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+      });
+
+      const userId = dbUser._id;
+
+      await Account.create({
+        userId,
+        balance: 1 + Math.random() * 10000,
+      });
+
+      const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "15m" });
+      res.status(201).json({
+        message: "User Registered Successfully",
+        token: token,
+        isAuthenticated: true,
+      });
     }
-
-    const dbUser = await User.create({
-      userName: req.body.userName,
-      password: req.body.password,
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-    });
-
-    const userId = dbUser._id;
-
-    await Account.create({
-      userId,
-      balance: 1 + Math.random() * 10000,
-    });
-
-    const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "15m" });
-    res
-      .status(201)
-      .json({ message: "User Registered Successfully", token: token });
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "Error registering user", details: err });
@@ -127,7 +127,8 @@ userRouter.post("/signin", async (req, res) => {
 
     res.status(200).json({
       message: "Sign In Successful",
-      data: { token },
+      token: token,
+      isAuthenticated: true,
     });
   } catch (error) {
     console.log(error);
@@ -137,7 +138,11 @@ userRouter.post("/signin", async (req, res) => {
 
 userRouter.get("/logOut", authMiddleware, async (req, res) => {
   try {
-    res.status(200).json({ message: "Successfully LogOut", token: "" });
+    res.status(200).json({
+      message: "Successfully LogOut",
+      token: "",
+      isAuthenticated: false,
+    });
   } catch (error) {
     console.log(error);
   }

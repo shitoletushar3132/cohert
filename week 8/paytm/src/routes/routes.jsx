@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import SignUp from "../Pages/SignUp";
 import SignIn from "../Pages/SignIn";
+import PrivateRoute from "../hooks/PrivateRoute";
 
 // Lazy-loaded components
 const Home = React.lazy(() => import("../Pages/Home"));
@@ -12,9 +13,11 @@ const routes = [
   {
     path: "/",
     element: (
-      <Suspense fallback={<p className="text-center">Loading...</p>}>
-        <Home />
-      </Suspense>
+      <PrivateRoute>
+        <Suspense fallback={<p className="text-center">Loading...</p>}>
+          <Home />
+        </Suspense>
+      </PrivateRoute>
     ),
   },
 
