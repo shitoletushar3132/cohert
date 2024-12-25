@@ -66,7 +66,6 @@ const updateBody = zod.object({
 
 userRouter.post("/signup", async (req, res) => {
   const body = req.body;
-  console.log(req.body);
 
   try {
     const { success, error } = signUpSchema.safeParse(body);
@@ -102,6 +101,7 @@ userRouter.post("/signup", async (req, res) => {
       res.status(201).json({
         message: "User Registered Successfully",
         token: token,
+        name: firstName,
         isAuthenticated: true,
       });
     }
@@ -128,6 +128,7 @@ userRouter.post("/signin", async (req, res) => {
     res.status(200).json({
       message: "Sign In Successful",
       token: token,
+      name: user.firstName,
       isAuthenticated: true,
     });
   } catch (error) {

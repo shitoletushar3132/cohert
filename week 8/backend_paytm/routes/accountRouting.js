@@ -12,10 +12,8 @@ accountRouter.get("/balance", authMiddleware, async (req, res) => {
     const account = await Account.findOne({ userId: userId });
 
     res.status(200).json({
-      data: {
-        Balance: parseFloat(account.balance).toFixed(2),
-        Message: `Success for ${userId}`,
-      },
+      Balance: parseFloat(account.balance).toFixed(2),
+      Message: `Success for ${userId}`,
     });
   } catch (error) {
     res.status(500).json({ message: "Server Error....Try Again" });
