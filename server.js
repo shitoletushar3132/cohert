@@ -6,7 +6,6 @@ const server = http.createServer((req, res) => {
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS"); // Allow specific HTTP methods
   res.setHeader("Access-Control-Allow-Headers", "Content-Type"); // Allow specific headers
 
-  console.log(req);
   // Handle preflight requests (OPTIONS)
   if (req.method === "OPTIONS") {
     res.writeHead(204); // No Content
@@ -18,6 +17,12 @@ const server = http.createServer((req, res) => {
   const number = () => {
     return Math.round(Math.random() * 100);
   };
+
+  let l;
+
+  for (let i = 0; i < 1234; i++) {
+    l += i;
+  }
 
   // Set response headers and send JSON response
   res.writeHead(200, { "Content-Type": "application/json" });
@@ -32,6 +37,6 @@ const server = http.createServer((req, res) => {
 });
 
 // Start the server
-server.listen(3001, () => {
+server.listen(3000, () => {
   console.log("Server is running on http://localhost:3000");
 });
