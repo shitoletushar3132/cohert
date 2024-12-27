@@ -1,0 +1,1 @@
+postgresql://tushar:SH5eaetSzD4oJRmWv5X7KuGBbGcJfUnX@dpg-ctmpoaq3esus739rlqb0-a.oregon-postgres.render.com/test_k77e
