@@ -1,16 +1,23 @@
 "use client";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import React, { FormEvent, useState } from "react";
+import { solve } from "../actions/user";
 
-import React, { useState, FormEvent } from "react";
-
-const Page: React.FC = () => {
+const SignupComponent = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const router = useRouter();
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     // Handle sign-in logic here
     console.log("Email:", email);
     console.log("Password:", password);
+
+    solve(email, password);
+
+    router.push("/");
   };
 
   return (
@@ -63,4 +70,4 @@ const Page: React.FC = () => {
   );
 };
 
-export default Page;
+export default SignupComponent;
