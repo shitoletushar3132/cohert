@@ -102,6 +102,9 @@
 12. docker build -t
     - to build theimage from the docker file -t give name
 
+13. docker exec -it --docker id-- /bin/bash
+    - get the access to the ssh in the container to interaction in container
+
 ---
 
 ## 🗎 Docker file
@@ -126,3 +129,4 @@
 ```
 docker run -p 3000:3000 -e DATABASE_URL="postgres://localhost:"
 ```
+
