@@ -216,4 +216,20 @@ docker run -d -v volume_name:/data/db --name mongo --network net_name
 mongodb://mongo_container_name:27017/myDatabase
 ```
 
+---
 
+# Docker Compose
+
+- it is a yml file . it looks like the json file which contains the key value pair
+
+- docker compose is used to run multi-container docker application
+
+- by using that file we can configure application's services, networks, and volumes using single command.
+
+- it is combination of the multiple commands
+
+- how to run compose file
+
+```
+docker-compose up
+```
