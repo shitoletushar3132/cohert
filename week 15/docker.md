@@ -100,6 +100,7 @@
     - to delete image
 
 12. docker build -t
+
     - to build theimage from the docker file -t give name
 
 13. docker exec -it --docker id-- /bin/bash
@@ -129,4 +130,90 @@
 ```
 docker run -p 3000:3000 -e DATABASE_URL="postgres://localhost:"
 ```
+
+---
+
+## ♺ Cached in Docker (layers)
+
+- optimising the Dockerfile
+
+```bash
+FROM node:20
+
+WORKDIR /app
+
+COPY package* .
+COPY ./prisma .
+
+RUN npm install
+RUN npx prisma generate
+
+COPY  . .
+RUN npm run build
+
+EXPOSE 3000
+
+CMD ["node", "dist/index.js"]
+```
+
+this says the layer of npm install will run only when the package.json will change until that layer will be cached . this will save the time and make a fast build
+
+---
+
+## 🖧 Networks and Volumes
+
+**Volumes** : Need to persist data across docker restarts
+
+- even the container crashesh the data still persists in volume.
+
+- create a volume
+
+```bash
+docker volume create Volume_database
+```
+
+- show all volumes
+
+```
+docker volume ls
+```
+
+- Mount the volume to mongo which store data in the volume which persists
+
+```
+docker run -v volume_database:/data/db -p 27017:27017 mongo
+
+// /data/db which can be the data store by mongo in that dir
+```
+
+**Network** : Need to allow containers to talk to each other and the outside world
+
+- localhost in docker means its own localhost network
+
+- how to make containers talk to each other
+
+- create a network
+
+```
+docker network create vs_newtork
+```
+
+- see all network present
+
+```
+docker network ls
+```
+
+- start the containers on the same network
+
+```
+docker run -d -v volume_name:/data/db --name mongo --network net_name
+```
+
+- MongoDB Url is pass is
+
+```
+mongodb://mongo_container_name:27017/myDatabase
+```
+
 
